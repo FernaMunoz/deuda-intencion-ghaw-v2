@@ -1,0 +1,16 @@
+agente,n_agentes,porcentaje
+.github/workflows/gh-aw-pr-rereview.md,48,7.9
+.github/workflows/gh-aw-pr-review.md,48,7.9
+.github/workflows/issue-triage.md,30,5.0
+.github/workflows/repo-assist.md,28,4.6
+.github/workflows/daily-repo-status.md,19,3.1
+.github/workflows/code-simplifier.md,10,1.7
+.github/workflows/ci-doctor.md,8,1.3
+.github/workflows/duplicate-code-detector.md,5,0.8
+.github/workflows/daily-test-improver.md,5,0.8
+.github/workflows/check-python-versions.md,4,0.7
+.github/workflows/extension-template-sync.md,4,0.7
+.github/workflows/issue-triage-agent.md,4,0.7
+.github/workflows/link-checker.md,4,0.7
+.github/workflows/daily-doc-updater.md,4,0.7
+.github/workflows/supply-chain-review.md,3,0.5

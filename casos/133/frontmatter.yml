@@ -1,0 +1,77 @@
+on:
+  schedule:
+  - cron: 0 14 * * 1-5
+  workflow_dispatch: null
+permissions:
+  actions: read
+  contents: read
+  issues: read
+  pull-requests: read
+imports:
+- shared/reporting.md
+safe-outputs:
+  create-issue:
+    expires: 2d
+    labels:
+    - agentic-workflows
+    - "Area: Documentation"
+    title-prefix: "[linter] "
+  noop:
+    report-as-issue: false
+steps:
+- name: Download super-linter log
+  uses: actions/download-artifact@v4
+  with:
+    name: super-linter-log
+    path: /tmp/gh-aw/
+description: Runs Markdown quality checks using Super Linter and creates issues for violations
+jobs:
+  super_linter:
+    permissions:
+      contents: read
+      packages: read
+      statuses: write
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+        persist-credentials: false
+    - env:
+        CREATE_LOG_FILE: "true"
+        DEFAULT_BRANCH: main
+        ENABLE_GITHUB_ACTIONS_STEP_SUMMARY: "true"
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        LOG_FILE: super-linter.log
+        VALIDATE_ALL_CODEBASE: "false"
+        VALIDATE_MARKDOWN: "true"
+      id: super-linter
+      name: Super-linter
+      uses: super-linter/super-linter@v8.6.0
+    - id: check-results
+      name: Check for linting issues
+      run: |
+        if [ -f "super-linter.log" ] && [ -s "super-linter.log" ]; then
+          if grep -qE "ERROR|WARN|FAIL" super-linter.log; then
+            echo "needs-linting=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "needs-linting=false" >> "$GITHUB_OUTPUT"
+          fi
+        else
+          echo "needs-linting=false" >> "$GITHUB_OUTPUT"
+        fi
+    - if: always()
+      name: Upload super-linter log
+      uses: actions/upload-artifact@v4
+      with:
+        name: super-linter-log
+        path: super-linter.log
+        retention-days: 7
+name: Markdown Linter
+timeout-minutes: 15
+tools:
+  bash:
+  - "*"
+  cache-memory: true
+  edit: null

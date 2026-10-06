@@ -1,0 +1,138 @@
+# ============================================================
+# SETUP INSTRUCTIONS
+# ============================================================
+# 1. Create a GitHub PAT (classic or fine-grained) with Contents:write
+#    on the SatelliteQE/broker.wiki repository.
+# 2. Add it as a repository secret named WIKI_SYNC_PAT on
+#    SatelliteQE/broker (Settings → Secrets → Actions).
+# 3. After editing this file's frontmatter, recompile:
+#      gh aw compile .github/workflows/wiki-sync.md
+# ============================================================
+
+on:
+  schedule:
+    - cron: "0 22 * * 5"  # Every Friday at 22:00 UTC
+  workflow_dispatch:
+    inputs:
+      apply:
+        description: "Apply proposed changes to the wiki (default: create issue only)"
+        type: boolean
+        default: false
+
+description: >
+  Analyzes recent commits to master for documentation-relevant changes
+  and either reports proposed wiki updates as a GitHub issue (default)
+  or applies them directly to the SatelliteQE/broker wiki (when apply=true).
+
+permissions:
+  contents: read
+  issues: read
+  metadata: read
+
+tools:
+  edit:
+  github:
+    toolsets: [repos, issues]
+    mode: local
+  cache-memory:
+  web-fetch:
+
+network:
+  firewall: true
+  allowed:
+    - defaults
+    - github
+
+safe-outputs:
+  create-issue:
+    title-prefix: "[wiki-sync] "
+    labels: [documentation]
+    close-older-issues: true
+    expires: 21
+  jobs:
+    push-to-wiki:
+      description: "Writes proposed wiki changes to SatelliteQE/broker.wiki and pushes them."
+      runs-on: ubuntu-latest
+      steps:
+        - name: Apply wiki changes
+          env:
+            WIKI_SYNC_PAT: ${{ secrets.WIKI_SYNC_PAT }}
+          run: |
+            set -euo pipefail
+
+            if [ -z "${WIKI_SYNC_PAT:-}" ]; then
+              echo "::error::WIKI_SYNC_PAT secret is not set. See .github/workflows/wiki-sync.md for setup instructions."
+              exit 1
+            fi
+
+            echo "::add-mask::${WIKI_SYNC_PAT}"
+            git -c "http.extraHeader=Authorization: Bearer ${WIKI_SYNC_PAT}" \
+              clone https://github.com/SatelliteQE/broker.wiki.git wiki
+            cd wiki
+            git config http.extraHeader "Authorization: Bearer ${WIKI_SYNC_PAT}"
+
+            python3 - <<'PYEOF'
+            import json, os, sys
+
+            output_file = os.environ.get("GH_AW_AGENT_OUTPUT", "")
+            if not output_file or not os.path.isfile(output_file):
+                print("No agent output file found; nothing to apply.")
+                sys.exit(0)
+
+            with open(output_file) as f:
+                data = json.load(f)
+
+            items = [i for i in data.get("items", []) if i.get("type") == "push_to_wiki"]
+            if not items:
+                print("No push_to_wiki items in agent output; nothing to apply.")
+                sys.exit(0)
+
+            wrote = []
+            for item in items:
+                for change in item.get("changes", []):
+                    filename = change.get("filename", "")
+                    # Guard: only plain .md filenames, no path traversal
+                    if (
+                        not filename.endswith(".md")
+                        or "/" in filename
+                        or filename.startswith(".")
+                    ):
+                        print(f"Skipping unsafe filename: {filename!r}", file=sys.stderr)
+                        continue
+                    print(f"Writing {filename}")
+                    with open(filename, "w") as fout:
+                        fout.write(change["content"])
+                    wrote.append(filename)
+
+            if not wrote:
+                print("No valid files to write; exiting.")
+                sys.exit(0)
+            PYEOF
+
+            git config user.email "github-actions[bot]@users.noreply.github.com"
+            git config user.name "github-actions[bot]"
+            git add -A
+
+            if git diff --staged --quiet; then
+              echo "No changes to commit — wiki is already up to date."
+              exit 0
+            fi
+
+            COMMIT_MSG=$(python3 - <<'PYEOF'
+            import json, os, sys
+            with open(os.environ["GH_AW_AGENT_OUTPUT"]) as f:
+                data = json.load(f)
+            items = [i for i in data.get("items", []) if i.get("type") == "push_to_wiki"]
+            msg = (items[0].get("commit_message") if items else None) or "docs: weekly wiki sync [automated]"
+            print(msg)
+            PYEOF
+            )
+
+            git commit -m "${COMMIT_MSG}"
+
+            if ! git push; then
+              echo "::warning::Push failed (possible conflict). A summary issue was still created by the agent."
+              exit 1
+            fi
+
+            echo "Wiki updated: ${COMMIT_MSG}"

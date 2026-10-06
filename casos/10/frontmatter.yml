@@ -1,0 +1,61 @@
+name: Documentation Bot
+description: >
+  Analyzes PR changes and creates documentation updates in vaadin/docs
+  when code changes affect user-facing features, APIs, or behavior.
+
+on:
+  pull_request:
+    types: [assigned]
+
+# Opt-in trigger: only run when vaadin-bot is assigned to a merged PR.
+if: >
+  github.event.assignee.login == 'vaadin-bot' &&
+  github.event.pull_request.merged == true
+
+permissions:
+  contents: read
+  pull-requests: read
+
+engine: codex
+
+tools:
+  github:
+    # gh-proxy routes GitHub API access through the pre-authenticated gh CLI,
+    # so api.github.com does not need to be in the network allowlist.
+    mode: gh-proxy
+    toolsets: [repos, pull_requests, search]
+    github-token: ${{ secrets.VAADIN_BOT_TOKEN }}
+  edit:
+  bash: true
+
+# Allow GitHub domains (github.com, *.githubusercontent.com, ...) so the agent
+# can read and update the vaadin/docs repository.
+network:
+  allowed:
+    - defaults
+    - github
+
+timeout-minutes: 30
+
+env:
+  SOURCE_REPO: ${{ github.repository }}
+  PR_NUMBER: ${{ github.event.pull_request.number }}
+  PR_AUTHOR: ${{ github.event.pull_request.user.login }}
+  PR_TITLE: ${{ github.event.pull_request.title }}
+  PR_BRANCH: ${{ github.event.pull_request.head.ref }}
+
+safe-outputs:
+  create-pull-request:
+    target-repo: "vaadin/docs"
+    base-branch: "main"
+    title-prefix: "[docs] "
+    labels: [documentation, automated]
+    draft: true
+    expires: 14
+    fallback-as-issue: true
+    github-token: ${{ secrets.VAADIN_BOT_TOKEN }}
+  assign-to-user:
+    target-repo: "vaadin/docs"
+    target: "*"
+    github-token: ${{ secrets.VAADIN_BOT_TOKEN }}
+  add-comment:

@@ -1,0 +1,21 @@
+name: AI Documentation Check
+on:
+  pull_request:
+    types: [labeled]
+    names: [ai-doc-check]
+
+permissions: read-all
+engine: copilot
+tools:
+  bash: true
+  github:
+    read-only: true
+    allowed:
+      - pull_request_read
+      - get_commit
+      - list_commits
+      - search_code
+safe-outputs:
+  add-comment:
+    target: 'triggering'
+    max: 1

@@ -1,0 +1,30 @@
+name: Documentation Sync
+description: >
+  Identifies documentation files that are out of sync with recent code changes
+  and opens a pull request with the necessary updates.
+on:
+  schedule: daily on weekdays
+  workflow_dispatch:
+permissions:
+  contents: read
+  issues: read
+  pull-requests: read
+engine:
+  id: copilot
+  model: gpt-4.1
+  args: ["--allow-paths", "README.md,docs/**"]
+tools:
+  github:
+    mode: remote
+    toolsets: [default]
+  bash: ["git", "cat", "grep", "find", "ls", "head", "tail", "wc"]
+  edit:
+network:
+  allowed:
+    - go
+safe-outputs:
+  create-pull-request:
+    title-prefix: "[docs-sync] "
+    labels: [documentation]
+    draft: false
+    expires: 7

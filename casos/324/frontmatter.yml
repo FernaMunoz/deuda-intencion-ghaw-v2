@@ -1,0 +1,25 @@
+name: Duplicate Code Detector
+description: Identifies duplicate code patterns across the codebase and suggests refactoring opportunities
+on:
+  workflow_dispatch:
+  schedule: daily
+permissions:
+  contents: read
+  issues: read
+  pull-requests: read
+engine: copilot
+tools:
+  serena: ['typescript']
+safe-outputs:
+  create-issue:
+    expires: 2d
+    title-prefix: '[duplicate-code] '
+    labels: [code-quality, automated-analysis, cookie]
+    assignees: copilot
+    group: true
+    max: 3
+timeout-minutes: 15
+strict: true
+imports:
+  - shared/mood.md
+source: github/gh-aw/.github/workflows/duplicate-code-detector.md@852cb06ad52958b402ed982b69957ffc57ca0619

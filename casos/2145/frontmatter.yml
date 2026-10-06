@@ -1,0 +1,57 @@
+on:
+  schedule:
+  - cron: 54 1 * * 1-4
+  workflow_dispatch: null
+permissions:
+  contents: read
+  issues: read
+  pull-requests: read
+network:
+  allowed:
+  - defaults
+  - github
+imports:
+- shared/github-guard-policy.md
+safe-outputs:
+  create-pull-request:
+    auto-merge: true
+    draft: false
+    expires: 1d
+    labels:
+    - documentation
+    - automation
+    protected-files: fallback-to-issue
+    reviewers:
+    - copilot
+    title-prefix: "[docs] "
+  noop: null
+description: Automatically reviews and updates documentation to ensure accuracy and completeness
+emoji: 📝
+# Pin a model supported by the Copilot subscription tier. The default
+# (claude-sonnet-4.6) is not available on Copilot Pro/Education and causes
+# "400 The requested model is not supported" failures (issue #547).
+engine:
+  id: copilot
+  model: gpt-5-mini
+name: Daily Documentation Updater
+strict: true
+timeout-minutes: 45
+tools:
+  bash:
+  - find docs -name "*.md" -o -name "*.mdx"
+  - find docs -maxdepth 1 -ls
+  - find docs -name "*.md" -exec cat {} +
+  - grep -r "*" docs
+  - git
+  - find pkg/parser/schemas -name "*.json"
+  - cat pkg/parser/schemas/*.json
+  cache-memory: true
+  cli-proxy: true
+  edit: null
+  github:
+    min-integrity: approved
+    mode: gh-proxy
+    toolsets:
+    - default
+tracker-id: daily-doc-updater
+source: github/gh-aw/.github/workflows/daily-doc-updater.md@51c1a43172d27e586e271e615a0f63da36d87654

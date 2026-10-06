@@ -1,0 +1,44 @@
+description: |
+  Daily performance improver for Flight School.
+  Finds and fixes one performance issue per run using a progressive tier system.
+  Tier 1: bundle size and dead code. Tier 2: render performance and API efficiency.
+  Tier 3: architecture and loading optimization. Uses cache-memory to persist
+  tier progress across runs. Creates focused draft PRs with before/after measurements.
+
+on:
+  schedule: daily around 7am
+  workflow_dispatch:
+  stop-after: +1mo
+
+permissions: read-all
+
+safe-outputs:
+  create-pull-request:
+    title-prefix: "[perf] "
+    labels: [performance, automation]
+
+tools:
+  edit:
+  bash:
+    - "npm:*"
+    - "npx:*"
+    - "node:*"
+    - "cat"
+    - "grep"
+    - "wc"
+    - "head"
+    - "tail"
+    - "sort"
+    - "find"
+    - "diff"
+    - "echo"
+    - "ls"
+    - "pwd"
+  github:
+    toolsets: [repos, issues, pull_requests]
+  cache-memory:
+
+network:
+  allowed:
+    - defaults
+    - node
