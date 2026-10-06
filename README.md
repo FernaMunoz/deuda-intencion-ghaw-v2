@@ -1,10 +1,10 @@
-# Del Markdown al YAML: deuda de intención en GitHub Agentic Workflows
+# La brecha entre intención y compilación: Un estudio exploratorio de la Deuda de Intención en GitHub Agentic Workflows
 
 Paquete de réplica **parcial (Etapa 2)** del estudio que caracteriza la deuda de intención en agentes definidos con GitHub Agentic Workflows (gh-aw), comparando el archivo Markdown de cada agente con el YAML compilado que GitHub Actions ejecuta.
 
 - **Autora:** Fernanda Muñoz Pinochet, Universidad de La Frontera
-- **Versión del repositorio:** `etapa2` _(completar con la etiqueta o el commit usado en la entrega)_
-- **DOI Zenodo:** _completar después de publicar_
+- **Versión del repositorio:** `etapa2` 
+- **DOI Zenodo:** 10.5281/zenodo.23176382 (https://doi.org/10.5281/zenodo.23176382)
 
 ## Preguntas de investigación
 
@@ -109,4 +109,4 @@ El paso 2 imprime además una **validación**: compara las brechas detectadas en
 
 ## Licencia
 
-_Completar (por ejemplo, MIT para el código y CC BY 4.0 para los datos derivados)._
+MIT
