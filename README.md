@@ -111,4 +111,4 @@ El paso 2 imprime además una **validación**: compara las brechas detectadas en
 
 ## Licencia
 
-El código se distribuye bajo licencia MIT. Los datos derivados y la documentación se distribuyen bajo licencia Creative Commons Attribution 4.0 International (CC BY 4.0).
+El código se distribuye bajo licencia MIT.
