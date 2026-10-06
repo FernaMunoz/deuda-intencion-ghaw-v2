@@ -1,0 +1,27 @@
+version_id,repo,agente,es_validacion,frontmatter_legible,lock_legible_como_yaml,n_imports,lineas_body_con_texto,runtime_imports_en_lock,roles_compilados,permisos_write_compilado,version_compilador,motor,registra_body_hash,n_candidatas
+1017,1684183768022814313,.github/workflows/keybot.md,False,True,True,0,79,1,"admin,maintainer,write","contents, discussions, issues, pull-requests",v0.71.1,copilot,False,3
+2145,1360459716505887700,.github/workflows/daily-doc-updater.md,False,True,True,1,172,3,,"contents, issues, pull-requests",v0.76.1,copilot,False,1
+1138,298195968384301599,.github/workflows/gh-aw-pr-rereview.md,False,True,True,2,0,3,"admin,maintainer,write","id-token, issues, pull-requests",v0.71.5,claude,False,8
+1712,923531521657869480,.github/workflows/repo-assist.md,False,True,True,0,148,1,"admin,maintainer,write","contents, discussions, issues, pull-requests",v0.71.5,copilot,False,3
+324,8799030191185056170,.github/workflows/duplicate-code-detector.md,False,True,True,1,136,2,,issues,v0.55.0,,False,1
+975,3851646640096830129,.github/workflows/cdk-pr-review.md,False,True,True,1,17,2,,"id-token, pull-requests",v0.56.2,,False,3
+2387,7588067176443151598,.github/workflows/repo-assist.md,False,True,True,0,121,1,"admin,maintainer,write","contents, discussions, issues, pull-requests",v0.68.3,copilot,False,3
+366,2345438738015705176,.github/workflows/dash.md,False,True,True,0,105,1,"admin,maintainer,write","contents, copilot-requests, pull-requests",v0.80.9,copilot,True,1
+1993,140853249158931842,.github/workflows/pydantic-ai-regression-detector.md,False,True,True,9,1,10,,issues,v0.74.8,claude,False,2
+935,7130230857486899699,.github/workflows/gh-aw-pr-rereview.md,False,True,True,2,0,3,"admin,maintainer,write","id-token, issues, pull-requests",v0.71.5,claude,False,8
+1801,6815041630131085718,.github/workflows/gh-aw-pr-rereview.md,False,True,True,2,0,3,"admin,maintainer,write","id-token, issues, pull-requests",v0.71.5,claude,False,8
+1192,7839165825188922328,.github/workflows/gh-aw-pr-review.md,False,True,True,2,0,3,"admin,maintainer,write","id-token, pull-requests",v0.71.5,claude,False,7
+689,7939280069088062942,.github/workflows/gh-aw-pr-review.md,False,True,True,2,0,3,"admin,maintainer,write","id-token, pull-requests",v0.71.5,claude,False,7
+2581,8104758924105236885,.github/workflows/daily-qa.md,False,True,True,0,19,1,,"contents, discussions, issues, pull-requests",v0.47.1,,False,1
+660,8572663269662090818,.github/workflows/wiki-sync.md,False,True,True,0,60,1,,issues,v0.68.3,copilot,False,1
+2472,6690498778208086486,.github/workflows/daily-perf-improver.md,False,True,True,0,66,1,,"contents, issues, pull-requests",v0.49.4,,False,1
+1731,1639091654872730530,.github/workflows/repo-assist.md,False,True,True,0,133,1,"admin,maintainer,write","contents, discussions, issues, pull-requests",v0.79.6,copilot,True,3
+628,1737186022696218451,.github/workflows/gh-aw-pr-rereview.md,False,True,True,2,0,3,"admin,maintainer,write","id-token, issues, pull-requests",v0.71.5,claude,False,8
+1317,2479365640035073414,.github/workflows/gh-aw-pr-rereview.md,False,True,True,2,0,3,"admin,maintainer,write","id-token, issues, pull-requests",v0.71.5,claude,False,8
+2643,8375826996565743284,.github/workflows/docs-sync.md,False,True,True,0,30,1,,"contents, issues, pull-requests",v0.57.2,,False,1
+10,8401317167309685863,.github/workflows/doc-bot.md,True,True,True,0,125,1,"admin,maintainer,write","contents, discussions, issues, pull-requests",v0.77.5,codex,True,2
+38,4170326814940479816,.github/workflows/auto-triage.md,True,True,True,0,37,1,,pull-requests,v0.71.5,copilot,False,1
+5,9089213639968762207,.github/workflows/daily-repo-status.md,True,True,True,0,11,1,,issues,v0.76.1,copilot,False,1
+132,2696056629267340882,.github/workflows/malicious-code-scan.md,True,True,True,0,175,1,,security-events,v0.79.8,copilot,True,1
+133,2696056629267340882,.github/workflows/markdown-linter.md,True,True,True,1,46,2,,"issues, statuses",v0.79.8,copilot,True,1
+305,6456014655828266219,.github/workflows/documentation.md,True,True,True,0,47,1,,"discussions, issues, pull-requests",,,False,1
